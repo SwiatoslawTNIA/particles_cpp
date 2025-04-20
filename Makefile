@@ -7,6 +7,8 @@ OUTPUT_OPTION = -o $@
 #Linking:
 LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
 CC= g++
+#Libraries:
+SMFL_LIBRARY = -lsfml-graphics -lsfml-window -lsfml-system
 
 vpath %.cc sources
 vpath %.h headers
@@ -18,11 +20,15 @@ vpath %.h headers
 %.o: %.c++
 	$(COMPILE.C) $(OUTPUT_OPTION) $<
 
-run: c++
-	./c++
+run: main
+	./main
 
-c++: c++.o
-c++.o: c++.cc c++.h
+main: main.o particle.o game.o
+	$(LINK.o) $(OUTPUT_OPTION) $^ $(SMFL_LIBRARY)
+
+main.o: main.cc main.h 
+particle.o: particle.cc particle.h
+game.o: game.cc game.h
 
 .INTERMEDIATE: *.o
 

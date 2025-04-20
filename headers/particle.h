@@ -1,17 +1,29 @@
 #ifndef PARTICLE_
 #define PARTICLE_
-
-//each particle has different size, color, 
+#include <tuple>
+#include <SFML/Graphics.hpp>
+//each particle has different size, 
 class Particle
 {
 private:
-  enum class color{RED, BLUE, GREEN, YELLOW};
-
-  int x_coord_;
-  int y_coord_;
-  double size_;
-  double velocity_;
+  int x_;
+  int y_;
+  float x_vel_;
+  float y_vel_;
+  float size_;
 public:
-  Particle(int x_coord, int y_coord, double size, double velocity):x_coord_{x_coord}, y_coord_{y_coord}, size_{size}, velocity_{velocity}{}
+  Particle(int x, int y, float x_vel, float y_vel, float size):x_{x}, y_{y},  x_vel_{x_vel}, y_vel_{y_vel},size_{size}{}
+  Particle(const Particle&);
+  Particle& operator=(const Particle&);
+  //no moving:
+  Particle(Particle &&) = delete;
+  Particle& operator=(Particle &&) = delete;
+
+  //methods:
+
+  //getters, setters:
+  std::pair<int,int> get_coords(void) const noexcept {return std::pair<int,int>{x_, y_};}
+  double get_size(void) const noexcept{return this->size_;}
+  std::pair<float,float> get_vel(void) const noexcept{return std::pair<float,float>{x_vel_, y_vel_};}
 };
 #endif

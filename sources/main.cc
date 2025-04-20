@@ -1,12 +1,12 @@
 //---------------------------------------------------------------------------------------------------------------------
-// c++.cc
+// main.cc
 //
-// <// <main file, connects main logic>
-
+// main file, connects main logic
 //
 //---------------------------------------------------------------------------------------------------------------------
 //
-#include "c++.h"
+#include "main.h"
+
 //---------------------------------------------------------------------------------------------------------------------
 ///
 /// This is an example header comment. Here, you explain, what the
@@ -19,7 +19,34 @@
 //
 int main(void)
 {
-  using namespace std;
-  cout << "Everything works alright.";
+  // int particle_n{init()};
+  std::vector<Particle> particles;
+  
+  
+  //create the window:
+  // sf::RenderWindow window(sf::VideoMode(800, 600), "Particles");
+  // // sf::Text t{"Hello, welcome to the particle simulation"}
+  // sf::CircleShape circle(100.f);
+  // circle.setFillColor(sf::Color::Green);
+
+  // while(window.isOpen())
+  // {
+  //   sf::Event event;
+  //   while(window.pollEvent(event))
+  //   {
+  //     //close the window on exit:
+  //     if(event.type == sf::Event::Closed)
+  //       window.close();
+
+
+  //     window.clear();
+
+  //     window.draw(circle);
+  //     window.display();
+  //   }
+  // }
+  Game game;
+  game.run();
   return 0;
 }
+

@@ -6,4 +6,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 //
 #include <iostream>
+#include <vector>
+#include <optional>
 
+#include "SFML/Graphics.hpp"//for graphics
+#include "particle.h"
+#include "game.h"
