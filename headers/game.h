@@ -15,7 +15,7 @@ class Game
        is_moving_left{false},
        is_moving_right{false};
   void processEvents();
-  void update();
+  void update(sf::Time delta_time);
   void render();
   void handlePlayerInput(sf::Keyboard::Key key, bool key_pressed);
 

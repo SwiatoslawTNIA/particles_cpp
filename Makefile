@@ -1,13 +1,15 @@
-COMPILE.C=$(COMPILE.cc)
-COMPILE.cc=$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
-CXXFLAGS=-g3 -I headers 
-CPPFLAGS= -Wall -Wextra -Wpedantic 
-CXX= g++
+COMPILE.C 	= $(COMPILE.cc)
+COMPILE.cc 	= $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+CXXFLAGS 	=-g3 -I headers 
+CPPFLAGS 	= -Wall -Wextra -Wpedantic 
+CXX 		= g++
 OUTPUT_OPTION = -o $@
+
 #Linking:
-LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
-CC= g++
+LINK.o 		= $(CC) $(LDFLAGS) $(TARGET_ARCH)
+CC			= g++
 #Libraries:
+
 SMFL_LIBRARY = -lsfml-graphics -lsfml-window -lsfml-system
 
 vpath %.cc sources

@@ -8,7 +8,7 @@
 /// @return void
 //
 Game::Game(void):
-window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Particles"), particle()
+window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Particles"), particle{}
 {
   particle.setRadius(40.f);
   particle.setPosition(100.f, 100.f);
@@ -23,11 +23,16 @@ window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDe
 /// @return void
 //
 void Game::run()
-{
+{ 
+  //to measure the time each frame takes to load, delta_time must always be the same!!!
+  sf::Clock clock;
+  sf::Time timeSinceLastUpdate = sf::Time::Zero;
   while(window.isOpen())
   {
     processEvents();//user input, closes the window if sf::Event::Closed
-    update();
+    timeSinceLastUpdate += clock.restart();
+    sf::Time delta_time = clock.restart();//returns the elapsed time since its start + restarts the clock
+    update(delta_time);
     render();
   }
 }
@@ -71,22 +76,30 @@ y
 ///
 /// \brief update the game logic
 ///
-/// @param void 
+/// @param delta_time carries the time elapsed from the last frame, can be converted to seconds to move the object properly
+/// independent of current frame rate
 ///
 /// @return void
 //
-void Game::update(void) 
+void Game::update(sf::Time delta_time) 
 {
   sf::Vector2f movement(0.f, 0.f);
-  if(is_moving_down)
-    movement.y -= 1.f;//abbreviated from 1.0f
-  if(is_moving_left)
-    movement.x -= 1.f;
-  if(is_moving_right)
-    movement.x += 1.f;
-  if(is_moving_up)
-    movement.y += 1.f;
-  particle.move(movement);
+  float speed{50.f};
+
+  //check if the particle is out_of_bounds:
+  auto particle_bounds = particle.getGlobalBounds();
+  auto window_size = window.getSize();
+
+  if(is_moving_down && ( particle_bounds.top + particle_bounds.height + speed <= window_size.y))
+    movement.y += speed;//abbreviated from 1.0f
+  if(is_moving_left  && (particle_bounds.left - speed >= 0))
+    movement.x -= speed;
+  if(is_moving_right  && ( particle_bounds.left + particle_bounds.width + speed <= window_size.x))
+    movement.x += speed;
+  if(is_moving_up  && ( particle_bounds.top - speed >= 0))
+    movement.y -= speed;
+  particle.move(movement * delta_time.asSeconds());
+
 }
 //---------------------------------------------------------------------------------------------------------------------
 ///
@@ -102,6 +115,8 @@ void Game::render(void)
   window.draw(particle);
   window.display();
 }
+//each key is both pressed and unpressed, which triggers the event, on unpressed each is_moving_... gets set to false
+//because of the 
 //---------------------------------------------------------------------------------------------------------------------
 ///
 /// \brief handles the keypresses by redistributing them among the bools, so that the update func can properly respond 
@@ -122,23 +137,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool is_pressed)
     is_moving_right = is_pressed;
   else if(key == sf::Keyboard::S)
     is_moving_down = is_pressed;
-}
-void Game::display_exit()
-{
-  sf::Text text;
-  int text_size{40};
-  // text.setString("Bye, have a nice time!");
-  text.setCharacterSize(text_size);
-
-  std::pair<float, float> coords {
-    sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height
-  };//[x,y]
-  // text.setPosition( (coords.first - text.getString().getSize()) / 2, (coords.second - text_size) / 2);
-  // auto now = std::chrono::system_clock::now();
-
-  // while(window.isOpen())
-  // {
-  //   if(std::chrono::system_clock::now() > now + std::chrono::seconds(3))
-  //     window.close();
-  // }
+  else if(key == sf::Keyboard::Q)
+    window.close();
 }
