@@ -7,12 +7,24 @@
 ///
 /// @return void
 //
+#define PLANE_PATH "images/plane2.png"
+
 Game::Game(void):
-window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Particles"), particle{}
+window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Particles"), player{}
 {
-  particle.setRadius(40.f);
-  particle.setPosition(100.f, 100.f);
-  particle.setFillColor(sf::Color::Cyan);
+  //enable v-sync:
+  window.setVerticalSyncEnabled(true);
+  //hide mouse-cursor:
+  window.setMouseCursorVisible(false);
+
+  if(!texture.loadFromFile(PLANE_PATH))
+  {
+    std::cerr << "Unable to locate the image, exiting...";
+    exit(EXIT_FAILURE);
+  }
+  player.setTexture(texture);
+  player.setPosition(100.f, 100.f);
+
 }
 //---------------------------------------------------------------------------------------------------------------------
 ///
@@ -24,7 +36,7 @@ window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDe
 //
 void Game::run(void)
 { 
-  const sf::Time time_per_frame{sf::seconds(1.f / 60.f)};//60 fps
+  const sf::Time time_per_frame{sf::seconds(1.f / 120.f)};//120 fps
   //to measure the time each frame takes to load, delta_time must always be the same!!!
   sf::Clock clock;
   sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -89,23 +101,32 @@ y
 void Game::update(sf::Time delta_time) 
 {
   sf::Vector2f movement(0.f, 0.f);
-  float speed{200.f};
+  float speed{600.f};
 
   //check if the particle is out_of_bounds:
-  auto particle_bounds = particle.getGlobalBounds();
+  auto player_bounds = player.getGlobalBounds();
   auto window_size = window.getSize();
 
-  if(is_moving_down && ( particle_bounds.top + particle_bounds.height + speed * delta_time.asSeconds()<= window_size.y))
+  if(is_moving_down && (player_bounds.top + player_bounds.height + speed * delta_time.asSeconds()<= window_size.y))
     movement.y += speed;//abbreviated from 1.0f
-  if(is_moving_left  && (particle_bounds.left - speed * delta_time.asSeconds() >= 0))
+  if(is_moving_left  && (player_bounds.left - speed * delta_time.asSeconds() >= 0))
     movement.x -= speed;
-  if(is_moving_right  && ( particle_bounds.left + particle_bounds.width + speed * delta_time.asSeconds() <= window_size.x))
+  if(is_moving_right  && (player_bounds.left + player_bounds.width + speed * delta_time.asSeconds() <= window_size.x))
     movement.x += speed;
-  if(is_moving_up  && ( particle_bounds.top - speed * delta_time.asSeconds() >= 0))
+  if(is_moving_up  && (player_bounds.top - speed * delta_time.asSeconds() >= 0))
     movement.y -= speed;
-  particle.move(movement * delta_time.asSeconds());
+  player.move(movement * delta_time.asSeconds());
+
+  //update the shots:
 
 }
+//---------------------------------------------------------------------------------------------------------------------
+/*
+
+  sf::Texture class holds the actual image data (loaded from memory)
+  sf::Sprite class represents an instance with position and orientation in the scene(where and how to put an image
+  on the screen)
+*/
 //---------------------------------------------------------------------------------------------------------------------
 ///
 /// \brief render the game to the screen
@@ -116,8 +137,8 @@ void Game::update(sf::Time delta_time)
 //
 void Game::render(void)
 {
-  window.clear();
-  window.draw(particle);
+  window.clear(sf::Color::Black);
+  window.draw(player);
   window.display();
 }
 //each key is both pressed and unpressed, which triggers the event, on unpressed each is_moving_... gets set to false

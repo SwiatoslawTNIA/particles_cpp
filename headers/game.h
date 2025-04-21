@@ -1,14 +1,21 @@
 #ifndef GAME_
 #define GAME_
+
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <iostream>
+
+#include "particle.h"
 class Game
 {
   private:
   
   sf::RenderWindow window;
-  sf::CircleShape particle;
+  //resources:
+  sf::Texture texture;
+  sf::Sprite player;
   //keys:
   bool is_moving_up{false},
        is_moving_down{false},
@@ -18,8 +25,7 @@ class Game
   void update(sf::Time delta_time);
   void render();
   void handlePlayerInput(sf::Keyboard::Key key, bool key_pressed);
-
-  void display_exit();
+  std::vector<Particle> shots;
   public:
     Game();
     void run();
