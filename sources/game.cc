@@ -7,10 +7,8 @@
 ///
 /// @return void
 //
-
-
 Game::Game(void):
-window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Shooter"), player{}
+window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "the most BADASS shooter ever"), player{}
 {
   //enable v-sync:
   window.setVerticalSyncEnabled(true);
@@ -30,7 +28,8 @@ window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDe
   }
   if(!asteroid.loadFromFile(ASTEROID_PATH))
   {
-    
+    std::cerr << "Unable to locate the asteroid image, exiting...";
+    exit(EXIT_FAILURE);
   }
   //init the player:
   player.setScale(0.3f, 0.3f);
@@ -132,7 +131,7 @@ void Game::update(sf::Time delta_time)
   player.move(movement * delta_time.asSeconds());
 
   //update the shots:
-  float shot_speed{600.f};
+  float shot_speed{800.f};
   for(std::size_t i = 0; i < shots.size(); ++i)
   {
     auto shot_bounds = shots[i].get_shape().getGlobalBounds();
