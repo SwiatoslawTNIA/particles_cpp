@@ -22,6 +22,7 @@ window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDe
     std::cerr << "Unable to locate the image, exiting...";
     exit(EXIT_FAILURE);
   }
+  player.setScale(0.3f, 0.3f);
   player.setTexture(texture);
   player.setPosition(100.f, 100.f);
 
