@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 // c++.h
 //
-// <A program that displays the particles's movement, calculating the collision physics, etc...>
+// <A shooter >
 //
 //---------------------------------------------------------------------------------------------------------------------
 //
@@ -10,5 +10,5 @@
 #include <optional>
 
 #include "SFML/Graphics.hpp"//for graphics
-#include "particle.h"
 #include "game.h"
+//shot gets included through game

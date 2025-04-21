@@ -25,12 +25,13 @@ vpath %.h headers
 run: main
 	./main
 
-main: main.o particle.o game.o
+main: main.o game.o shot.o asteroid.o
 	$(LINK.o) $(OUTPUT_OPTION) $^ $(SMFL_LIBRARY)
 
 main.o: main.cc main.h 
-particle.o: particle.cc particle.h
+shot.o: shot.cc shot.h
 game.o: game.cc game.h
+asteroid.o: asteroid.cc asteroid.h
 
 .INTERMEDIATE: *.o
 
