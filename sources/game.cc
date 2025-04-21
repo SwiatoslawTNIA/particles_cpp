@@ -22,8 +22,9 @@ window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDe
 ///
 /// @return void
 //
-void Game::run()
+void Game::run(void)
 { 
+  const sf::Time time_per_frame{sf::seconds(1.f / 60.f)};//60 fps
   //to measure the time each frame takes to load, delta_time must always be the same!!!
   sf::Clock clock;
   sf::Time timeSinceLastUpdate = sf::Time::Zero;
@@ -31,8 +32,12 @@ void Game::run()
   {
     processEvents();//user input, closes the window if sf::Event::Closed
     timeSinceLastUpdate += clock.restart();
-    sf::Time delta_time = clock.restart();//returns the elapsed time since its start + restarts the clock
-    update(delta_time);
+    while(timeSinceLastUpdate > time_per_frame)//time since last state update > time required for one frame
+    {
+      timeSinceLastUpdate -= time_per_frame;
+      processEvents();
+      update(time_per_frame);
+    }
     render();
   }
 }
@@ -84,19 +89,19 @@ y
 void Game::update(sf::Time delta_time) 
 {
   sf::Vector2f movement(0.f, 0.f);
-  float speed{50.f};
+  float speed{200.f};
 
   //check if the particle is out_of_bounds:
   auto particle_bounds = particle.getGlobalBounds();
   auto window_size = window.getSize();
 
-  if(is_moving_down && ( particle_bounds.top + particle_bounds.height + speed <= window_size.y))
+  if(is_moving_down && ( particle_bounds.top + particle_bounds.height + speed * delta_time.asSeconds()<= window_size.y))
     movement.y += speed;//abbreviated from 1.0f
-  if(is_moving_left  && (particle_bounds.left - speed >= 0))
+  if(is_moving_left  && (particle_bounds.left - speed * delta_time.asSeconds() >= 0))
     movement.x -= speed;
-  if(is_moving_right  && ( particle_bounds.left + particle_bounds.width + speed <= window_size.x))
+  if(is_moving_right  && ( particle_bounds.left + particle_bounds.width + speed * delta_time.asSeconds() <= window_size.x))
     movement.x += speed;
-  if(is_moving_up  && ( particle_bounds.top - speed >= 0))
+  if(is_moving_up  && ( particle_bounds.top - speed * delta_time.asSeconds() >= 0))
     movement.y -= speed;
   particle.move(movement * delta_time.asSeconds());
 
