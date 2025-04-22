@@ -2,4 +2,4 @@
 
 
 // float Asteroid::
-//to implement:
+//to 
