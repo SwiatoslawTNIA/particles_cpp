@@ -2,4 +2,4 @@
 
 
 // float Asteroid::
-//to 
+//do something
