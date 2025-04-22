@@ -1,4 +1,5 @@
 #include "asteroid.h"
 
 
-float Asteroid::
+// float Asteroid::
+//to implement:
