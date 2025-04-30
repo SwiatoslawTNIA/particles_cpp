@@ -53,8 +53,15 @@ void Game::run(void)
   //to measure the time each frame takes to load, delta_time must always be the same!!!
   sf::Clock clock;
   sf::Time timeSinceLastUpdate = sf::Time::Zero;
+  auto time_start = std::chrono::system_clock::now();
+  bool has_to_create_asteroid{false};
   while(window.isOpen())
   {
+    if(std::chrono::system_clock::now() - time_start > std::chrono::seconds(2))
+    {
+      create_asteroid(this->asteroids);
+      time_start = std::chrono::system_clock::now();
+    }
     processEvents();//user input, closes the window if sf::Event::Closed
     timeSinceLastUpdate += clock.restart();
     while(timeSinceLastUpdate > time_per_frame)//time since last state update > time required for one frame
@@ -66,6 +73,7 @@ void Game::run(void)
     render();
   }
 }
+
 //---------------------------------------------------------------------------------------------------------------------
 ///
 /// \brief reacts to different events created by the user
@@ -140,7 +148,6 @@ void Game::update(sf::Time delta_time)
 
     if(shot_bounds.top + shot_bounds.height < 0)
       shots.erase(shots.begin() + i--);//erase the shot, update the i index
-
   }
 }
 //---------------------------------------------------------------------------------------------------------------------
@@ -165,6 +172,9 @@ void Game::render(void)
 
   //render shots:
   for(std::size_t i = 0; i < shots.size(); ++i)
+    window.draw(shots[i].get_shape());
+  //render asteroids:
+  for(std::size_t i = 0; i < asteroids.size(); ++i)
     window.draw(shots[i].get_shape());
   window.display();
 }

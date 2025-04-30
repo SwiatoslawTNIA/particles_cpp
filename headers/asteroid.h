@@ -20,7 +20,6 @@ class Asteroid
     Asteroid(sf::Texture& texture)
     {
         shape_.setTexture(texture);
-        
 
     }
 };

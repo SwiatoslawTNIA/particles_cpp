@@ -26,7 +26,7 @@ class Game
   //resources:
   sf::Sprite player;
   std::vector<Shot> shots;
-  
+  std::vector<Asteroid> asteroids;
   //textures:
   sf::Texture texture;
   sf::Texture bullet_texture;
@@ -51,5 +51,5 @@ class Game
     void run();
 
 };
-
+void create_asteroid(Game& game);
 #endif

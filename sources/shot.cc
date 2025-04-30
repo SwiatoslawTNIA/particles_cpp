@@ -8,7 +8,7 @@
 /// @return void
 //
 Shot::Shot(sf::Texture& texture)
-  {
-    shape_.setTexture(texture);
-    shape_.setScale(0.2f, 0.2f);
-  }
+{
+  shape_.setTexture(texture);
+  shape_.setScale(0.2f, 0.2f);
+}
